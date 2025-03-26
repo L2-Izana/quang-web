@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê tin - My App</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="banner"></div>
+    
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">TRANG CHỦ</a>
+            <div class="dropdown">
+                <button class="dropbtn">ĐƠN VỊ</button>
+                <div class="dropdown-content">
+                    <a href="#">PA01</a>
+                    <a href="#">PA02</a>
+                    <a href="#">PA03</a>
+                    <a href="#">PA04</a>
+                    <a href="#">PA05</a>
+                    <a href="#">PA08</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">THỐNG KÊ TIN</button>
+                <div class="dropdown-content">
+                    <a href="thong_ke_tin.html?period=1month" class="period-link" data-period="1month">1 tháng</a>
+                    <a href="thong_ke_tin.html?period=1period" class="period-link" data-period="1period">1 quý</a>
+                    <a href="thong_ke_tin.html?period=6months" class="period-link" data-period="6months">6 tháng</a>
+                    <a href="thong_ke_tin.html?period=1year" class="period-link" data-period="1year">1 năm</a>
+                </div>
+            </div>
+            <a href="#">VĂN BẢN</a>
+        </div>
+        <div class="navbar-right">
+            <!-- This will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div style="padding: 20px;">
+        <h2 style="font-size: 30px; color: #333; text-align: left; margin-bottom: 30px; margin-top: 10px; border-bottom: 2px solid #ddd;">
+            Thống kê tin - <span id="periodTitle">1 Tháng</span>
+        </h2>
+        
+        <!-- Button to view the input form -->
+        <div style="margin-bottom: 15px; text-align: right;">
+            <a href="nhap_tin_bao.html" style="padding: 15px 25px; background-color: #4CAF50; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;">Nhập tin báo</a>
+        </div>
+        
+        <div style="border: 1px solid #ddd; padding: 15px;">
+            <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #4CAF50; color: white;">
+                    <tr>
+                        <th>STT</th>
+                        <th>Ngày báo</th>
+                        <th>Tình hình ANTT</th>
+                        <th>Địa bàn</th>
+                        <th>Cấp báo</th>
+                        <th>Đơn vị báo</th>
+                        <th>LLBM</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody">
+                    <!-- This will be populated by JavaScript -->
+                    <tr>
+                        <td colspan="8">No records found for this period.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // Initialize page without login check
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug info
+            console.log('Statistics page loaded');
+            console.log('Table body element:', document.getElementById('reportTableBody'));
+        });
+    </script>
+    
+    <!-- Add this at the end of the body tag, before closing </body> -->
+    <div id="llbmModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto;">
+        <div style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            <span id="closeModal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2 style="margin-top: 0;">Thông tin LLBM</h2>
+            
+            <form id="llbmForm">
+                <input type="hidden" id="llbmReportId">
+                <input type="hidden" id="llbmReportCreated">
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="llbmName" style="display: block; margin-bottom: 5px; font-weight: bold;">Tên:</label>
+                    <input type="text" id="llbmName" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="llbmAge" style="display: block; margin-bottom: 5px; font-weight: bold;">Tuổi:</label>
+                    <input type="number" id="llbmAge" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="llbmEthnicity" style="display: block; margin-bottom: 5px; font-weight: bold;">Dân tộc:</label>
+                    <input type="text" id="llbmEthnicity" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="llbmReligion" style="display: block; margin-bottom: 5px; font-weight: bold;">Tôn giáo:</label>
+                    <input type="text" id="llbmReligion" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="llbmHometown" style="display: block; margin-bottom: 5px; font-weight: bold;">Quê quán:</label>
+                    <input type="text" id="llbmHometown" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+                
+                <div style="text-align: right;">
+                    <button type="button" id="saveLlbmBtn" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <style>
+        .llbm-cell:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .llbm-cell {
+            transition: background-color 0.3s;
+        }
+    </style>
+    
+    <script>
+    // Add LLBM feature functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize LLBM cells
+        makeAllLlbmCellsClickable();
+        
+        // Set up modal close button
+        const closeModal = document.getElementById('closeModal');
+        if (closeModal) {
+            closeModal.addEventListener('click', closeLlbmModal);
+        }
+        
+        // Set up save button
+        const saveBtn = document.getElementById('saveLlbmBtn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', saveLlbmInfo);
+        }
+        
+        // Close the modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('llbmModal');
+            if (event.target === modal) {
+                closeLlbmModal();
+            }
+        });
+    });
+
+    // Make all LLBM cells clickable
+    function makeAllLlbmCellsClickable() {
+        // Wait for the table to be fully loaded
+        setTimeout(function() {
+            // Select all cells in the 7th column (LLBM)
+            const rows = document.querySelectorAll('#reportTableBody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 7) {
+                    const llbmCell = cells[6]; // 7th column (0-indexed)
+                    
+                    // Add class and style
+                    llbmCell.classList.add('llbm-cell');
+                    llbmCell.style.cursor = 'pointer';
+                    
+                    // Get the report data from the delete button if available
+                    const deleteBtn = row.querySelector('.delete-btn');
+                    if (deleteBtn) {
+                        const reportId = deleteBtn.getAttribute('data-id') || '';
+                        const reportCreated = deleteBtn.getAttribute('data-created') || '';
+                        
+                        // Store data in the cell
+                        llbmCell.setAttribute('data-id', reportId);
+                        llbmCell.setAttribute('data-created', reportCreated);
+                        
+                        // Add click handler
+                        llbmCell.addEventListener('click', openLlbmModal);
+                    }
+                }
+            });
+            
+            console.log('LLBM cells initialized');
+        }, 1000); // Wait 1 second for everything to load
+    }
+
+    // Open the LLBM modal
+    function openLlbmModal(e) {
+        const cell = e.currentTarget;
+        const reportId = cell.getAttribute('data-id');
+        const reportCreated = cell.getAttribute('data-created');
+        
+        console.log('Opening LLBM modal for:', { reportId, reportCreated });
+        
+        // Set the report ID and created_at in the form
+        document.getElementById('llbmReportId').value = reportId || '';
+        document.getElementById('llbmReportCreated').value = reportCreated || '';
+        
+        // Try to load existing LLBM info
+        const llbmInfo = getLlbmInfo(reportCreated);
+        if (llbmInfo) {
+            document.getElementById('llbmName').value = llbmInfo.name || '';
+            document.getElementById('llbmAge').value = llbmInfo.age || '';
+            document.getElementById('llbmEthnicity').value = llbmInfo.ethnicity || '';
+            document.getElementById('llbmReligion').value = llbmInfo.religion || '';
+            document.getElementById('llbmHometown').value = llbmInfo.hometown || '';
+        } else {
+            // Clear form if no info exists
+            document.getElementById('llbmName').value = '';
+            document.getElementById('llbmAge').value = '';
+            document.getElementById('llbmEthnicity').value = '';
+            document.getElementById('llbmReligion').value = '';
+            document.getElementById('llbmHometown').value = '';
+        }
+        
+        // Show the modal
+        document.getElementById('llbmModal').style.display = 'block';
+    }
+
+    // Close the LLBM modal
+    function closeLlbmModal() {
+        document.getElementById('llbmModal').style.display = 'none';
+    }
+
+    // Save LLBM information
+    function saveLlbmInfo() {
+        const reportId = document.getElementById('llbmReportId').value;
+        const reportCreated = document.getElementById('llbmReportCreated').value;
+        
+        console.log('Saving LLBM info for:', { reportId, reportCreated });
+        
+        const llbmInfo = {
+            name: document.getElementById('llbmName').value,
+            age: document.getElementById('llbmAge').value,
+            ethnicity: document.getElementById('llbmEthnicity').value,
+            religion: document.getElementById('llbmReligion').value,
+            hometown: document.getElementById('llbmHometown').value
+        };
+        
+        // Save to localStorage
+        saveLlbmInfoToLocalStorage(reportCreated, llbmInfo);
+        
+        // Update the display
+        updateLlbmDisplay(reportCreated, llbmInfo);
+        
+        // Close the modal
+        closeLlbmModal();
+        
+        // Show success message
+        alert('Thông tin LLBM đã được lưu thành công!');
+    }
+
+    // Save LLBM info to localStorage
+    function saveLlbmInfoToLocalStorage(reportCreated, llbmInfo) {
+        if (!reportCreated) return;
+        
+        // Get existing LLBM data
+        let llbmData = JSON.parse(localStorage.getItem('llbmData') || '{}');
+        
+        // Add or update info for this report
+        llbmData[reportCreated] = llbmInfo;
+        
+        // Save back to localStorage
+        localStorage.setItem('llbmData', JSON.stringify(llbmData));
+        
+        console.log('LLBM info saved:', reportCreated, llbmInfo);
+    }
+
+    // Get LLBM info from localStorage
+    function getLlbmInfo(reportCreated) {
+        if (!reportCreated) return null;
+        
+        // Get existing LLBM data
+        const llbmData = JSON.parse(localStorage.getItem('llbmData') || '{}');
+        
+        // Return info for this report if exists
+        return llbmData[reportCreated] || null;
+    }
+
+    // Update the display of LLBM info - just show an indicator instead of all details
+    function updateLlbmDisplay(reportCreated, llbmInfo) {
+        if (!reportCreated) return;
+        
+        // Find the cell for this report
+        const llbmCell = document.querySelector(`.llbm-cell[data-created="${reportCreated}"]`);
+        if (!llbmCell) return;
+        
+        // Get the original content (form type)
+        const originalContent = llbmCell.textContent.trim();
+        
+        // Just add an indicator that info exists, don't show all details
+        if (llbmInfo.name) {
+            // llbmCell.innerHTML = `
+            //     ${originalContent} 
+            //     <span style="color: #1976d2; font-weight: bold; margin-left: 5px;">[i]</span>
+            // `;
+        } else {
+            llbmCell.textContent = originalContent;
+        }
+    }
+    </script>
+</body>
+</html> 

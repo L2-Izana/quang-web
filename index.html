@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="banner"></div>
+    
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">TRANG CHỦ</a>
+            <div class="dropdown">
+                <button class="dropbtn">ĐƠN VỊ</button>
+                <div class="dropdown-content">
+                    <a href="#">PA01</a>
+                    <a href="#">PA02</a>
+                    <a href="#">PA03</a>
+                    <a href="#">PA04</a>
+                    <a href="#">PA05</a>
+                    <a href="#">PA08</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">THỐNG KÊ TIN</button>
+                <div class="dropdown-content">
+                    <a href="thong_ke_tin.html?period=1month">1 tháng</a>
+                    <a href="thong_ke_tin.html?period=1period">1 quý</a>
+                    <a href="thong_ke_tin.html?period=6months">6 tháng</a>
+                    <a href="thong_ke_tin.html?period=1year">1 năm</a>
+                </div>
+            </div>
+            <a href="#">VĂN BẢN</a>
+        </div>
+        <div class="navbar-right">
+            <!-- This will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div style="padding: 20px;">
+        <h2>Trang Chủ</h2>
+        <p>Chưa có thông tin để cập nhật</p>
+    </div>
+    
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html> 

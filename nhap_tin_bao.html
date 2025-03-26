@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập tin báo - My App</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="banner"></div>
+    
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">TRANG CHỦ</a>
+            <div class="dropdown">
+                <button class="dropbtn">ĐƠN VỊ</button>
+                <div class="dropdown-content">
+                    <a href="#">PA01</a>
+                    <a href="#">PA02</a>
+                    <a href="#">PA03</a>
+                    <a href="#">PA04</a>
+                    <a href="#">PA05</a>
+                    <a href="#">PA08</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">THỐNG KÊ TIN</button>
+                <div class="dropdown-content">
+                    <a href="thong_ke_tin.html?period=1month">1 tháng</a>
+                    <a href="thong_ke_tin.html?period=1period">1 quý</a>
+                    <a href="thong_ke_tin.html?period=6months">6 tháng</a>
+                    <a href="thong_ke_tin.html?period=1year">1 năm</a>
+                </div>
+            </div>
+            <a href="#">VĂN BẢN</a>
+        </div>
+        <div class="navbar-right">
+            <!-- This will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div style="padding: 20px;">
+        <h2>Nhập tin báo</h2>
+        <form id="reportForm" class="form-container">
+            <div class="navbar-form">
+                <a href="#" data-form-type="dac-tinh" class="active">ĐT</a>
+                <a href="#" data-form-type="cong-tac-vien">CTV</a>
+                <a href="#" data-form-type="co-so-bi-mat">CSBM</a>
+            </div>
+            
+            <input type="hidden" id="formType" name="formType" value="dac-tinh">
+            
+            <div>
+                <label for="tinhHinh">Tình hình an ninh chính trị tại địa bàn, đối tượng:</label>
+                <input type="text" id="tinhHinh" name="tinhHinh" placeholder="Nhập tình hình" required>
+            </div>
+            
+            <div>
+                <label for="diaBan">Địa bàn:</label>
+                <input type="text" id="diaBan" name="diaBan" placeholder="Nhập địa bàn" required>
+            </div>
+            
+            <div>
+                <label for="capBaoTin">Cấp báo tin:</label>
+                <select id="capBaoTin" name="capBaoTin" required>
+                    <option value="cap-bo">Cấp Bộ</option>
+                    <option value="ban-giam-doc">Ban giám đốc</option>
+                    <option value="lanh-dao-phong">Lãnh đạo phòng</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="donViBao">Đơn vị báo:</label>
+                <select id="donViBao" name="donViBao" required>
+                    <option value="PA01">PA01</option>
+                    <option value="PA02">PA02</option>
+                    <option value="PA03">PA03</option>
+                    <option value="PA04">PA04</option>
+                    <option value="PA05">PA05</option>
+                    <option value="PA08">PA08</option>
+                </select>
+            </div>
+            
+            <button type="submit">Xác nhận</button>
+        </form>
+    </div>
+    
+    <!-- Load Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // Initialize page without login check
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug info
+            console.log('Report form page loaded');
+            
+            // Add event listener to form
+            const form = document.getElementById('reportForm');
+            if (form) {
+                form.addEventListener('submit', handleReportSubmission);
+            } else {
+                console.error('Report form not found');
+            }
+        });
+    </script>
+</body>
+</html> 
